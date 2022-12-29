@@ -1,0 +1,50 @@
+﻿@page "/Admin/ContactUs"
+<a class="btn btn-primary" @onclick="@(() => navigationManager?.NavigateTo("/Admin"))">
+    <i class="icon-arrow-left"></i>
+</a>
+
+<AdminTable T="ContactUs" Values="ListOfContactUs" Title="@("لیست تماس ها")">
+    <Header>
+    <tr>
+        <th>#</th>
+        <th>نام</th>
+        <th>ایمیل</th>
+        <th>متن</th>
+        <th></th>
+    </tr>
+    </Header>
+    <Body Context="ContactUs">
+    <tr class="@(ContactUs.HasAnswere ? "bg-success" : "bg-danger") text-white">
+        <th>@numberOfRow</th>
+        <th>@ContactUs.Name</th>
+        <th>@ContactUs.Email</th>
+        <th>@ContactUs.Text.Substring(0, 9)...</th>
+        <th>
+            <a class="btn btn-info btn-sm" @onclick="@(() => navigationManager?.NavigateTo($"/Admin/ContactUs/Detail/{ContactUs.ContactUsId}"))">
+                <i class="icon-envelope-letter"></i>
+            </a>
+        </th>
+    </tr>
+        @{
+            _ = numberOfRow++;
+        }
+    </Body>
+</AdminTable>
+
+@code
+{
+    [Inject]
+    private NavigationManager? navigationManager { get; set; } = null!;
+
+    [Inject]
+    private IContactUsRepository? repository { get; set; } = null!;
+
+    private IQueryable<ContactUs>? ListOfContactUs;
+
+    private int numberOfRow = 1;
+
+    protected override void OnInitialized()
+    {
+        ListOfContactUs = repository?.GetAll();
+    }
+}

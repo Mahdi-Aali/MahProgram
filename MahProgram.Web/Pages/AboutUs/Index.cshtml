@@ -1,0 +1,94 @@
+﻿@page "/AboutUs"
+@model MahProgram.Web.Pages.AboutUs.IndexModel
+@{
+    ViewBag.Title = "درباره ما";
+}
+
+@section PageTop
+    {
+    <div class="cover" data-image="/assets/images/photos/parallax.jpg">
+        <div class="page-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 rtl-text">
+                        <h1>درباره ما</h1>
+                    </div>
+                    <div class="col-lg-12">
+                        <ol class="breadcrumb rtl-text">
+                            <li><a asp-controller="Home" asp-action="Index">صفحه اصلی</a></li>
+                            <li class="active">درباره ما</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="page-bottom pbottom-70">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 rtl-text">
+				<p>تیم ماه پروگرام یک تیم برنامه نویسی پیشرو با هدف تولید، توسعه، حفظ، و ارائه خدمات نرم افزاری تحت عنوان یک هسته 2 نفره تشگیل و روز به روز بزرگ تر شده است. هدف اصلی تیم ماه پروگرام پیشرفت و رسیدن به بالاترین سطح ممکن است.</p>
+				<p>این تیم در تلاش هست تا بروز نگه داشتن خود با تکنولوژی های بروز Microsoft همیشه محصولی بروز و با قدرت و امنیت بالا را به مشتریان خود ارایه دهد</p>
+				<!-- ***** Gallery Start ***** -->
+				<div class="row page-gallery-wrapper">
+					<div class="col-lg-4 col-md-4 col-sm-12">
+						<a href="#" class="page-gallery imgfix_top_container" title="About Us" style="overflow: hidden; position: relative;">
+							<div id="imgfix_wrapper_layer_0_0" class="imgfix_wrapper_layer" style="position: relative; padding: 0; margin: 0; width: 100%; height: 100%; overflow: hidden;">
+								<img src="/assets/images/photos/about/1.jpg" alt="" class="imgfix_src_img" style="opacity: 1;">
+							</div>
+						</a>
+					</div>
+					<div class="col-lg-4 col-md-8 col-sm-12">
+						<div class="row">
+							<div class="col-lg-12 col-md-6">
+								<a href="#" class="page-gallery small imgfix_top_container" title="About Us" style="overflow: hidden; position: relative;">
+									<div id="imgfix_wrapper_layer_0_1" class="imgfix_wrapper_layer" style="position: relative; padding: 0; margin: 0; width: 100%; height: 100%; overflow: hidden;">
+										<img src="/assets/images/photos/about/2.jpg" alt="" class="imgfix_src_img" style="opacity: 1;">
+									</div>
+								</a>
+							</div>
+							<div class="col-lg-12 col-md-6">
+								<a href="#" class="page-gallery small imgfix_top_container" title="About Us" style="overflow: hidden; position: relative;">
+									<div id="imgfix_wrapper_layer_0_2" class="imgfix_wrapper_layer" style="position: relative; padding: 0; margin: 0; width: 100%; height: 100%; overflow: hidden;">
+										<img src="/assets/images/photos/about/3.jpg" alt="" class="imgfix_src_img" style="opacity: 1;">
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12">
+						<a href="#" class="page-gallery imgfix_top_container" title="About Us" style="overflow: hidden; position: relative;">
+							<div id="imgfix_wrapper_layer_0_3" class="imgfix_wrapper_layer" style="position: relative; padding: 0; margin: 0; width: 100%; height: 100%; overflow: hidden;">
+								<img src="/assets/images/photos/about/4.jpg" alt="" class="imgfix_src_img" style="opacity: 1;">
+							</div>
+						</a>
+					</div>
+				</div>
+				<!-- ***** Gallery End ***** -->
+				<p>
+					شما میتواند این اطمینان خاطر را به خود بدهید که پروژه و محصول نرم افزاری شما با صحت و اطمینان کامل انجام و به دست شما خواهد رسید و در جهت ترویج محصول شما در میان عامه مردم همواره تلاش خواهیم کرد.
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<section class="parallax">
+	<div class="parallax-content">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="info rtl-text">
+						<p>ما <span> اپلیکیشن </span>هایی را طراحی و توسعه می دهیم که کاربران شما را خوشحال کرده و تجارت شما را توسعه می دهد.</p>
+						<a class="btn-white-line" asp-page="/ContactUs">ارتباط با ما</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<vc:our-team />

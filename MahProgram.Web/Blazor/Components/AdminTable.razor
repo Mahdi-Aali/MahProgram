@@ -1,0 +1,47 @@
+﻿@typeparam T
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-wrap bar-success">
+                    <h4 class="card-title">@Title</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-block">
+                    <table class="table">
+                        <thead>
+                            @Header
+                        </thead>
+                        <tbody>
+                            @foreach (T obj in Values)
+                            {
+                                @Body(obj);
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment Header { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public RenderFragment<T> Body { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public IQueryable<T> Values { get; set; } = null!;
+}

@@ -1,0 +1,71 @@
+﻿@page "/Admin/Team"
+@using MahProgram.DataAccess.Models.EmployeeModel;
+@using MahProgram.DataAccess.Repositories.EmployeeRepository;
+@inherits OwningComponentBase<IEmployeeRepository>
+<div class="row">
+    <a class="btn btn-primary" @onclick="@(() => navigationManager?.NavigateTo("/Admin"))">
+        <i class="icon-arrow-left"></i>
+    </a>
+    <a class="btn btn-success" @onclick="@(() => navigationManager?.NavigateTo("/Admin/Team/AddEmployee"))">
+        <i class="icon-plus"></i> افزودن عضو جدید
+    </a>
+</div>
+
+<AdminTable T="Employee" Title="@("تیم ما")" Values="EmployeeList">
+    <Header>
+    <tr>
+        <th>#</th>
+        <th>نام</th>
+        <th>مهارت</th>
+        <th>بیو</th>
+        <th></th>
+    </tr>
+    </Header>
+    <Body Context="Employee">
+        <tr>
+            <th>@numberOfRow</th>
+            <th>@Employee.FullName</th>
+            <th>@Employee.Skill</th>
+            <th>@Employee.Bio</th>
+            <th>
+            <a class="btn btn-info btn-sm" @onclick="@(() => navigationManager?.NavigateTo($"/Admin/Team/EditEmployee/{Employee.EmployeeId}"))">
+                <i class="icon-pencil"></i>
+            </a>
+            <a class="btn btn-danger btn-sm" @onclick="@(async() => await RemoveEmployee(Employee.EmployeeId))">
+                <i class="icon-trash"></i>
+            </a>
+            </th>
+            @{
+                _ = numberOfRow++;
+            }
+        </tr>
+    </Body>
+</AdminTable>
+
+@code {
+    [Inject]
+    private NavigationManager? navigationManager { get; set; }
+
+    public IEmployeeRepository repository => ScopedServices.CreateScope().ServiceProvider.GetRequiredService<IEmployeeRepository>();
+
+    public IQueryable<Employee>? EmployeeList = null!;
+
+    private int numberOfRow = 1;
+
+    protected override void OnInitialized()
+    {
+        Update();
+    }
+
+    public void Update()
+    {
+        EmployeeList = repository.GetAll();
+    }
+
+    public async Task RemoveEmployee(int id)
+    {
+        Employee employee = await repository.FindAsync(id);
+        await repository.RemoveAsync(employee);
+        Update();
+    }
+}

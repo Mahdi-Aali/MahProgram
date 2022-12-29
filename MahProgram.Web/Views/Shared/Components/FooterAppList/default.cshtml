@@ -1,0 +1,12 @@
+﻿@using MahProgram.DataAccess.Models.ProjectModel;
+@model IQueryable<Project>
+
+<div class="col-lg-2 col-md-4 col-sm-6 col-6 rtl-text">
+	<h5>اپ های محبوب ما</h5>
+	<ul class="footer-nav">
+		@foreach(Project project in Model)
+		{
+			<li><a asp-page="/OurWorks/SingleApp" asp-route-id="@project.ProjectId"><i class="fa fa-angle-left"></i><span>@(project.Name.Length > 12 ? project.Name.Substring(0, 12) : project.Name)</span></a></li>
+		}
+	</ul>
+</div>

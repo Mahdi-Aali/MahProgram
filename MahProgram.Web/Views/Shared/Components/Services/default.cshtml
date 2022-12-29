@@ -1,0 +1,12 @@
+﻿@using MahProgram.DataAccess.Models.ServiceModel;
+@model IQueryable<Service>
+
+@if (Model.Any())
+{
+	<ul>
+		@foreach(Service service in Model)
+		{
+			<li><a asp-page="/Services/ServiceDetail" asp-route-id="@service.ServiceId">@service.Name</a></li>
+		}
+	</ul>
+}

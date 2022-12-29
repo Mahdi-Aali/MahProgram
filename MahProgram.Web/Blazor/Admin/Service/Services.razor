@@ -1,0 +1,80 @@
+﻿@page "/Admin/Services"
+@inherits OwningComponentBase<IServiceRepository>
+<div class="row">
+    <a class="btn btn-primary" @onclick="@(() => navigationManager?.NavigateTo("/Admin"))">
+        <i class="icon-arrow-left"></i>
+    </a>
+    <a class="btn btn-success" @onclick="@(() => navigationManager?.NavigateTo("/Admin/Services/AddService"))">
+        <i class="icon-plus"></i> افزودن سرویس جدید
+    </a>
+</div>
+@if (ServiceList is not null)
+{
+    <AdminTable T="Service" Title="@("سرویس ها")" Values="ServiceList">
+        <Header>
+        <tr>
+            <th>#</th>
+            <th>عنوان</th>
+            <th>متن</th>
+            <th>تاریخ ثبت</th>
+            <th></th>
+        </tr>
+        </Header>
+        <Body Context="Service">
+        <tr>
+            <th>@numberOfRow</th>
+            <th>@Service.Name</th>
+            <th>@Service.Description.Substring(0, 49) ...</th>
+            <th>@Service.CreateDate</th>
+            <th>
+                <a class="btn btn-info btn-sm" @onclick="@(() => navigationManager?.NavigateTo($"/Admin/Services/EditService/{Service.ServiceId}"))">
+                    <i class="icon-pencil"></i>
+                </a>
+                <a class="btn btn-danger btn-sm" @onclick="@(async () => await DeleteServiceAsync(Service.ServiceId))">
+                    <i class="icon-trash"></i>
+                </a>
+            </th>
+        </tr>
+            @{
+                _ = numberOfRow++;
+            }
+        </Body>
+    </AdminTable>
+}
+else
+{
+    <div class="alert alert-primary text-white">
+        Loading...
+    </div>
+}
+
+
+@code {
+    //[Inject]
+    private IServiceRepository? repository => ScopedServices.CreateScope().ServiceProvider.GetRequiredService<IServiceRepository>();
+
+    [Inject]
+    public NavigationManager? navigationManager { get; set; }
+
+    private IQueryable<Service>? ServiceList { get; set; } = null!;
+
+    private int numberOfRow = 1;
+
+    protected override void OnInitialized()
+    {
+        Update();
+    }
+
+    private void Update()
+    {
+        ServiceList = repository?.GetAll();
+    }
+
+    private async Task DeleteServiceAsync(int id)
+    {
+        Service service = await repository!.FindAsync(id);
+        await repository.RemoveAsync(service);
+        Update();
+    }
+
+}

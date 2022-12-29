@@ -1,0 +1,63 @@
+﻿@using MahProgram.DataAccess.Models.EmployeeModel;
+@model IQueryable<Employee>
+
+<section class="section pbottom-70">
+    <div class="container">
+        <div class="row rtl-text">
+            <div class="col-lg-12">
+                <div class="center-heading">
+                    <h2 class="section-title">تیم حرفه ای ما</h2>
+                </div>
+            </div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6">
+                <div class="center-text">
+                    <p>تیم ماه پروگرام ترکیبی از بهترین برنامه نویسان و متخصصان در همه حوزه ها میباشد که هدف آنها پیشرفت و انجام کار با بالاترین کیفیت میباشد</p>
+                </div>
+            </div>
+        </div>
+        <div class="row rtl-row">
+            @foreach (Employee employee in Model)
+            {
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                    <div class="team-item rtl-text">
+                        <div class="header">
+                            <div class="img">
+                                <img class="height-100" src="/Images/EmployeeImage/@employee.ImagePath" alt="تصویر @employee.FullName">
+                            </div>
+                            <div class="info">
+                                <strong>@employee.FullName</strong>
+                                <span>@employee.Skill</span>
+                            </div>
+                        </div>
+                        <div class="body">
+                            @employee.Bio
+                        </div>
+                        <ul class="social">
+                            @if (employee.InstagramLink is not null)
+                            {
+                                <li><a href="@employee.InstagramLink"><i class="fa fa-instagram"></i></a></li>
+                            }
+                            @if (employee.TwitterLink is not null)
+                            {
+                                <li><a href="@employee.TwitterLink"><i class="fa fa-twitter"></i></a></li>
+                            }
+                            @if (employee.GitHubLink is not null)
+                            {
+                                <li><a href="@employee.GitHubLink"><i class="fa fa-github"></i></a></li>
+                            }
+                            @if (employee.TelegramLink is not null)
+                            {
+                                <li><a href="@employee.TelegramLink"><i class="fa fa-telegram"></i></a></li>
+                            }
+                            @if (employee.LinkedinLink is not null)
+                            {
+                                <li><a href="@employee.LinkedinLink"><i class="fa fa-linkedin"></i></a></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

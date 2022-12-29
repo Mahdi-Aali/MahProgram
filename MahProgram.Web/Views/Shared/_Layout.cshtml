@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>MahProgram - @ViewBag.Title</title>
+	<meta name="description" content="MahProgram is a software production and development company" />
+	<meta name="keywords" content="mah program, Mah Program, Programming agency, web site, mobile app, ماه پروگرام, شرکت برنامه نویسی, شرکت ماه پروگرام"/>
+	<meta name="author" content="Mah Program" />
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+
+	<!-- Bootstrap & Plugins CSS -->
+	<link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	<!-- Custom CSS -->
+	<link href="/assets/css/rtl-style.css" rel="stylesheet" type="text/css">
+	<link href="/assets/css/fonts.css" rel="stylesheet" type="text/css">
+	<link href="/assets/css/magnific-popup.css" rel="stylesheet" type="text/css">
+	@if (IsSectionDefined("css"))
+	{
+		@await RenderSectionAsync("css")
+	}
+</head>
+<body>
+
+	<!-- ***** Preloader Start ***** -->
+	<div class="loader-wrapper">
+		<div class="center">
+			<div class="dot dot-one"></div>
+			<div class="dot dot-two"></div>
+			<div class="dot dot-three"></div>
+			<div class="dot dot-four"></div>
+			<div class="dot dot-five"></div>
+		</div>
+	</div>
+	<!-- ***** Preloader End ***** -->
+	<!-- ***** Header Area Start ***** -->
+	<header class="header-area header-rtl">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<nav class="main-nav">
+						<!-- ***** Logo Start ***** -->
+						<a href="/" class="logo">
+							<img src="/assets/images/logo-white.svg" class="light-logo" alt="Beapp" />
+							<img src="/assets/images/logo-dark.svg" class="dark-logo" alt="Beapp" />
+						</a>
+						<!-- ***** Logo End ***** -->
+						<!-- ***** Menu Start ***** -->
+						<ul class="nav rtl-row">
+							<li><a href="/">صفحه اصلی</a></li>
+							<li><a asp-page="/OurWorks/Index">پروژه های ما</a></li>
+							<li><a asp-page="/AboutUs/Index">درباره ما</a></li>
+							<li><a asp-page="/Services/Index">خدمات</a></li>
+							<li><a asp-page="/ContactUs" class="btn-nav-line">ارتباط با ما</a></li>
+						</ul>
+						<a class="menu-trigger">
+							<span>منو</span>
+						</a>
+						<!-- ***** Menu End ***** -->
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- ***** Header Area End ***** -->
+
+	
+
+	<section class="page">
+
+		@if (IsSectionDefined("PageTop"))
+		{
+			@await RenderSectionAsync("PageTop")
+		}
+		@RenderBody()
+	</section>
+	<!-- ***** Footer Start ***** -->
+	<footer>
+		<div class="container">
+			<div class="row rtl-row">
+				<div class="col-lg-5 col-md-12 col-sm-12 rtl-text">
+					<img src="/assets/images/logo-dark.svg" class="logo" alt="">
+					<div class="text">حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.</div>
+				</div>
+				<div class="col-lg-2 col-md-4 col-sm-6 col-6 rtl-text">
+					<h5>دسترسی سریع</h5>
+					<ul class="footer-nav">
+						<li><a asp-page="/OurWorks/Index"><i class="fa fa-angle-left"></i><span>پروژه های ما</span></a></li>
+						<li><a asp-page="/AboutUs/Index"><i class="fa fa-angle-left"></i><span>درباره ما</span></a></li>
+						<li><a asp-page="/Services/Index"><i class="fa fa-angle-left"></i><span>خدمات</span></a></li>
+						<li><a asp-page="/ContactUs"><i class="fa fa-angle-left"></i><span>ارتباط با ما</span></a></li>
+					</ul>
+				</div>
+				<vc:footer-app-list />
+				<div class="col-lg-3 col-md-4 col-sm-12 rtl-text">
+					<h5>ارتباط با ما</h5>
+					<div class="address">
+						<p>تبریز، خیابان هفت تیر، خابان بیلانکوه غربی<br>کوچه حاج حسن آهنگر، پلاک 13</p>
+						<p>تلفن: (272) 211-7370</p>
+						<p><span>ایمیل:</span><a href="mailto:support@mahProgram.com">support@mahprogram.com</a></p>
+						<ul class="social">
+							<li><a href="https://instagram.com/hheydari02"><i class="fa fa-instagram-square"></i></a></li>
+							<li><a href="https://t.me/MicrosoftLover"><i class="fa fa-telegram-square"></i></a></li>
+							<li><a href="https://t.me/H_7755"><i class="fa fa-telegram-square"></i></a></li>
+							<li><a href="https://github.com/mahdi-aali"><i class="fa fa-github-square"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<p class="copyright rtl-text">© 1402 MahProgram. همه حقوق محفوظ است</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- ***** Footer Start ***** -->
+	<!-- jQuery -->
+	<script src="/assets/js/jquery-3.6.0.min.js"></script>
+
+	<!-- Bootstrap -->
+	<script src="/assets/js/popper.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+
+	<!-- Plugins -->
+	<script src="/assets/js/scrollreveal.min.js"></script>
+	<script src="/assets/js/parallax.min.js"></script>
+	<script src="/assets/js/jquery.waypoints.min.js"></script>
+	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="/assets/js/jquery.counterup.min.js"></script>
+	<script src="/assets/js/imgfix.js"></script>
+
+	<!-- Global Init -->
+	<script src="/assets/js/custom.js"></script>
+	@if (IsSectionDefined("script"))
+	{
+		@await RenderSectionAsync("script")
+	}
+</body>
+</html>

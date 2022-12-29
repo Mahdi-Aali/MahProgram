@@ -1,0 +1,165 @@
+﻿@page "/Admin/ContactUs/Detail/{Id:int}"
+@using MahProgram.Common.ModelConvertorExtensions;
+@using MahProgram.DTOs.Models.ContactUsModels;
+@using MahProgram.DataAccess.Repositories.ContactUsAnswereRepositories;
+
+<a class="btn btn-primary" @onclick="@(() => navigationManager?.NavigateTo("/Admin/ContactUs"))">
+    <i class="icon-arrow-left"></i>
+</a>
+@if (ContactUs is not null)
+{
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title">اطلاعات تماس آقا/خانم @ContactUs.Name</h4>
+                    </div>
+                </div>
+                @if (OpResult is not null && OpResult is true)
+                {
+                    <div class="alert alert-success text-white">
+                         عملیات با موفقیت انجام شد
+                    </div>
+                }
+                else if (OpResult is not null && OpResult is false)
+                {
+                    <div class="alert alert-danger text-white">
+                         عملیات با شکست مواجه شد
+                    </div>
+                }
+                <div class="card-body">
+                    <div class="card-block">
+                        <table class="table">
+                            <tr>
+                                <th>نام</th>
+                                <th>@ContactUs.Name</th>
+                            </tr>
+                            <tr>
+                                <th>ایمیل</th>
+                                <th><a href="mailto:@ContactUs.Email">@ContactUs.Email</a></th>
+                            </tr>
+                            <tr>
+                                <th>متن پیام</th>
+                                <th>@ContactUs.Text</th>
+                            </tr>
+                            <tr>
+                                <th>پاسخ داده شده</th>
+                                <th class="@(ContactUs.HasAnswere ? "text-success" : "text-danger")">@(ContactUs.HasAnswere ? "بله" : "خیر")</th>
+                            </tr>
+                            <tr>
+                                <th>تاریخ ثبت</th>
+                                <th>@ContactUs.CreateDate</th>
+                            </tr>
+                            <tr>
+                                <th>وظعیت حذفی</th>
+                                <th class="@(ContactUs.IsDeleted ? "text-danger" : "text-success")">@(ContactUs.IsDeleted ? "حذف منتطقی" : "عدم حذف")</th>
+                            </tr>
+                        </table>
+                        <div class="row">
+                            @if (!ContactUs.IsDeleted)
+                            {
+                                <div class="col-lg-3 col-md-6 col-sm-5">
+                                    <a class="btn btn-danger" @onclick="@(async() => await RemoveAsync())">
+                                        <i class="icon-trash"></i> حذف تماس
+                                    </a>
+                                </div>
+                            }
+                            @if (ContactUs.ContactUsAnswere is not null)
+                            {
+                                <div class="container-fluid">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-block">
+                                                <h5 class="card-title">پاسخ شما</h5>
+                                                <p class="card-text"></p>
+                                                <p class="textalign">
+                                                    @((MarkupString)ContactUs.ContactUsAnswere.ResponseMessage)
+                                                </p><p></p>
+                                                <p class="card-text"><small class="text-muted">@ContactUs.ContactUsAnswere.CreateDate</small></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-lg-7 col-md-6 col-sm-5">
+                                    <EditForm Model="@contactUsAnswereViewModel" OnValidSubmit="SendAnswereAsync">
+                                        <DataAnnotationsValidator />
+                                        <div class="input-group">
+                                            <lable>پاسخ شما : </lable>
+                                            <InputTextArea @bind-Value="contactUsAnswereViewModel.ResponseMessage" class="form-control" rows="12" cols="12"></InputTextArea>
+                                        </div>
+                                        <ValidationMessage For="@(() => contactUsAnswereViewModel.ResponseMessage)"/>
+                                        <div class="input-group">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="icon-cursor"></i> ازسال پاسخ
+                                            </button>
+                                        </div>
+                                    </EditForm>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-primary text-white">
+        Loading...
+    </div>
+}
+
+@code
+{
+    [Parameter]
+    public int Id { get; set; }
+
+    [Inject]
+    private IContactUsRepository? contactUsRepository { get; set; }
+
+    [Inject]
+    public IContactUsAnswereRepository? contactUsAnswereRepository { get; set; }
+
+    [Inject]
+    public NavigationManager? navigationManager { get; set; }
+
+
+    public bool? OpResult { get; set; }
+
+    private ContactUs ContactUs { get; set; } = null!;
+
+    private ContactUsAnswereViewModel contactUsAnswereViewModel { get; set; } = new();
+
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        ContactUs = await contactUsRepository?.FindAsync(Id)!;
+        if (ContactUs.ContactUsAnswere is null)
+        {
+            contactUsAnswereViewModel = new ContactUsAnswereViewModel
+            {
+                ContactUsId = Id
+            };
+        }
+    }
+
+
+    private async Task RemoveAsync()
+    {
+        OpResult = await contactUsRepository?.RemoveAsync(ContactUs)!;
+    }
+
+    private async Task SendAnswereAsync()
+    {
+        ContactUs.HasAnswere = true;
+        await contactUsRepository!.UpdateAsync(ContactUs);
+        OpResult = await contactUsAnswereRepository!.SendAnswereAsync(contactUsAnswereViewModel.ToContactUsAnswere(), ContactUs.Email);
+        await OnParametersSetAsync();
+    }
+}

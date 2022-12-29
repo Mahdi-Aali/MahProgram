@@ -1,0 +1,74 @@
+﻿@using MahProgram.DataAccess.Repositories.ProjectRepository;
+@using MahProgram.DataAccess.Models.ProjectModel;
+@page "/Admin/Projects"
+@inherits OwningComponentBase<IProjectRepository>
+<div class="row">
+    <a class="btn btn-primary" @onclick="@(() => navigationManager?.NavigateTo("/Admin"))">
+        <i class="icon-arrow-left"></i>
+    </a>
+    <a class="btn btn-success" @onclick="@(() => navigationManager?.NavigateTo("/Admin/Projects/AddProject"))">
+        <i class="icon-plus"></i> افزودن عضو جدید
+    </a>
+</div>
+
+
+<AdminTable T="Project" Title="@("پروژه های ما")" Values="listOfProjects">
+    <Header>
+        <tr>
+            <th>#</th>
+            <th>نام</th>
+            <th>تاریخ ثبت</th>
+            <th></th>
+        </tr>
+    </Header>
+    <Body Context="p">
+        <tr>
+            <th>@numberOfRow</th>
+            <th>@p.Name</th>
+            <th>@p.CreateDate</th>
+            <th>
+                <a class="btn btn-primary btn-sm" @onclick="@(() => navigationManager?.NavigateTo($"/Admin/Projects/EditProject/{p.ProjectId}"))">
+                    <i class="icon-pencil"></i>
+                </a>
+                <a class="btn btn-sm btn-danger" @onclick="@(async () => await DeleteAsync(p.ProjectId))">
+                    <i class="icon-trash"></i>
+                </a>
+            </th>
+        </tr>
+        @{
+            _ = numberOfRow++;
+        }
+    </Body>
+</AdminTable>
+
+
+
+@code
+{
+    [Inject]
+    private NavigationManager? navigationManager { get; set; }
+
+    private IProjectRepository repository => ScopedServices.CreateScope().ServiceProvider.GetRequiredService<IProjectRepository>();
+
+    private IQueryable<Project> listOfProjects { get; set; } = null!;
+
+    private int numberOfRow = 1;
+
+    protected override void OnInitialized()
+    {
+        Update();
+    }
+
+    private void Update()
+    {
+        listOfProjects = repository.GetAll();
+    }
+
+
+    private async Task DeleteAsync(int id)
+    {
+        Project project = await repository.FindAsync(id);
+        await repository.RemoveAsync(project);
+        Update();
+    }
+}

@@ -1,0 +1,172 @@
+﻿@page "/Admin/Team/EditEmployee/{Id:int}"
+@inherits OwningComponentBase<IEmployeeRepository>
+@using MahProgram.DataAccess.Models.EmployeeModel;
+@using MahProgram.DataAccess.Repositories.EmployeeRepository;
+@using MahProgram.Utilities.FileManagment;
+
+<a class="btn btn-primary" @onclick="@(() => navigationManager?.NavigateTo("/Admin/Team"))">
+    <i class="icon-arrow-left"></i>
+</a>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-wrap bar-success">
+                    <h4 class="card-title">افزودن عضو</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-block">
+                    <EditForm Model="Employee" OnValidSubmit="SubmitAsync">
+                        <DataAnnotationsValidator />
+                        <div class="input-group">
+                            <label class="form-label">نام کامل</label>
+                            <InputText class="form-control border-primary" @bind-Value="Employee.FullName" />
+                        </div>
+                        <div class="input-group">
+                            <label class="form-label">مهارت</label>
+                            <InputText class="form-control border-primary" @bind-Value="Employee.Skill" />
+                        </div>
+                        <div class="input-group">
+                            <label class="form-label">بایو @Employee.Bio.Length</label>
+                            <InputTextArea class="form-control border-primary" cols="12" rows="12" @bind-Value="Employee.Bio"></InputTextArea>
+                        </div>
+                        <div class="input-group">
+                            <label class="form-label">تصویر فرد</label>
+                            @if (!string.IsNullOrEmpty(EmployeeImage?.Name))
+                            {
+                                <p>@EmployeeImage.Name</p>
+                            }
+                            <div class="custom-file">
+                                <InputFile OnChange="@(e => EmployeeImage = e.File)" type="file" accept=".jpg,.jpeg,.png" class="custom-file-input" id="inputGroupFile01" />
+                                <label class="custom-file-label">انتخاب فایل</label>
+                            </div>
+                        </div>
+                        <ValidationMessage For="@(() => Employee.FullName)" />
+                        <ValidationMessage For="@(() => Employee.Bio)" />
+                        <ValidationMessage For="@(() => Employee.Skill)" />
+
+                        <hr />
+
+                        <h4 class="card-title">شبکه های اجتماعی</h4>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="input-group">
+                                    <label class="form-label">
+                                        لینک گیت هاب
+                                        <i class="fa fa-github"></i>
+                                    </label>
+                                    <InputText class="form-control border-primary" @bind-Value="@Employee.GitHubLink" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="input-group">
+                                    <label class="form-label">
+                                        لینک لینکدین
+                                        <i class="fa fa-linkedin"></i>
+                                    </label>
+                                    <InputText class="form-control border-primary" @bind-Value="@Employee.LinkedinLink" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="input-group">
+                                    <label class="form-label">
+                                        لینک توییتر
+                                        <i class="fa fa-twitter"></i>
+                                    </label>
+                                    <InputText class="form-control border-primary" @bind-Value="@Employee.TwitterLink" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="input-group">
+                                    <label class="form-label">
+                                        لینک اینستاگرام
+                                        <i class="fa fa-instagram"></i>
+                                    </label>
+                                    <InputText class="form-control border-primary" @bind-Value="@Employee.InstagramLink" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="input-group">
+                                    <label class="form-label">
+                                        لینک تلگرام
+                                        <i class="fa fa-telegram"></i>
+                                    </label>
+                                    <InputText class="form-control border-primary" @bind-Value="@Employee.TelegramLink" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <ValidationMessage For="@(() => Employee.GitHubLink)" />
+                        <ValidationMessage For="@(() => Employee.LinkedinLink)" />
+                        <ValidationMessage For="@(() => Employee.InstagramLink)" />
+                        <ValidationMessage For="@(() => Employee.TelegramLink)" />
+                        <ValidationMessage For="@(() => Employee.TwitterLink)" />
+                        @if (hasError)
+                        {
+                            <div class="alert alert-danger text-white">
+                                مشگلی پیش آمده. لطفا فایل log را برسی کنید
+                            </div>
+                        }
+                        <div class="input-group">
+                            <button type="submit" class="btn btn-success">
+                                <i class="icon-doc"></i> ویرایش عضو
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [Inject]
+    private NavigationManager? navigationManager { get; set; }
+
+    private bool hasError { get; set; } = false;
+
+    private IBrowserFile? EmployeeImage { get; set; }
+
+    public Employee Employee { get; set; } = new();
+
+    private IEmployeeRepository repository => ScopedServices.CreateScope().ServiceProvider.GetRequiredService<IEmployeeRepository>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Employee = await repository.FindAsync(Id);
+    }
+
+    public async Task SubmitAsync()
+    {
+        if (EmployeeImage is not null)
+        {
+            File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Images", "EmployeeImage", Employee.ImagePath));
+            Employee.ImagePath = await SaveChangedImage();
+        }
+        hasError = !await repository.UpdateAsync(Employee);
+        if (!hasError)
+        {
+            navigationManager?.NavigateTo("/Admin/Team");
+        }
+    }
+
+    private async Task<string> SaveChangedImage()
+    {
+        string imageName = $"{Guid.NewGuid()}{Path.GetExtension(EmployeeImage?.Name)}";
+        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", "EmployeeImage", imageName);
+        await FileSaver.SaveFileAsync(EmployeeImage!, imagePath);
+        return imageName;
+    }
+}

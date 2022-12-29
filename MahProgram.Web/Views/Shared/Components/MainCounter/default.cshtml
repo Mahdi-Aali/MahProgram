@@ -1,0 +1,35 @@
+﻿@model (int employeeCount, int projectCount, int serviceCount)
+
+
+<section class="parallax">
+	<div class="parallax-content">
+		<div class="container">
+			<div class="row rtl-row">
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<div class="count-item">
+						<strong>@Model.serviceCount</strong>
+						<span>خدمات<br> قابل ارائه</span>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<div class="count-item">
+						<strong>@Model.projectCount</strong>
+						<span>ساخته شده<br>اپلیکیشن</span>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<div class="count-item">
+						<strong>@Model.employeeCount</strong>
+						<span>توسعه<br>دهنده </span>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<div class="count-item">
+						<strong>@Model.projectCount</strong>
+						<span>مشتری<br>راضی </span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

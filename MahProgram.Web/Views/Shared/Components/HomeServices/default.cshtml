@@ -1,0 +1,44 @@
+﻿@using MahProgram.DataAccess.Models.ServiceModel;
+@model List<Service>
+
+<div class="col-lg-6 col-md-6 col-12">
+    @if (Model.Count() >= 1)
+    {
+        Service service = Model.ElementAt(0);
+        <a asp-page="/Services/ServiceDetail" asp-route-id="@service.ServiceId" class="home-services-item mtop-70" data-scroll-reveal="enter bottom move 30px over 0.6s after 0.2s">
+            <i class="fa fa-@service.Icon"></i>
+            <h5 class="services-title">@service.Name</h5>
+            <p>@Html.Raw(service.Description.Substring(0, 49)) ...</p>
+        </a>
+    }
+    @if (Model.Count() >= 2)
+    {
+        Service service = Model.ElementAt(1);
+        <a asp-page="/Services/ServiceDetail" asp-route-id="@service.ServiceId" class="home-services-item" data-scroll-reveal="enter bottom move 30px over 0.6s after 0.2s">
+            <i class="fa fa-@service.Icon"></i>
+            <h5 class="services-title">@service.Name</h5>
+            <p>@Html.Raw(service.Description.Substring(0, 49)) ...</p>
+        </a>
+    }
+</div>
+<div class="col-lg-6 col-md-6 col-12">
+    @if (Model.Count() >= 3)
+    {
+        Service service = Model.ElementAt(2);
+        <a asp-page="/Services/ServiceDetail" asp-route-id="@service.ServiceId" class="home-services-item active" data-scroll-reveal="enter bottom move 30px over 0.6s after 0.3s">
+            <i class="fa fa-@service.Icon"></i>
+            <h5 class="services-title">@service.Name</h5>
+            <p>@Html.Raw(service.Description.Substring(0, 49)) ...</p>
+        </a>
+    }
+    @if (Model.Count() >= 4)
+    {
+        Service service = Model.ElementAt(3);
+        <a asp-page="/Services/ServiceDetail" asp-route-id="@service.ServiceId" class="home-services-item" data-scroll-reveal="enter bottom move 30px over 0.6s after 0.3s">
+            <i class="fa fa-@service.Icon"></i>
+            <h5 class="services-title">@service.Name</h5>
+            <p>@Html.Raw(service.Description.Substring(0, 49)) ...</p>
+        </a>
+    }
+
+</div>

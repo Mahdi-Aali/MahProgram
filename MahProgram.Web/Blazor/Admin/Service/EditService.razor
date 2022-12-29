@@ -1,0 +1,117 @@
+﻿@page "/Admin/Services/EditService/{Id:int}"
+@using MahProgram.Utilities.FileManagment;
+@using MahProgram.Utilities.Logging;
+<a class="btn btn-primary" @onclick="@(() => navigationManager?.NavigateTo("/Admin/Services"))">
+    <i class="icon-arrow-left"></i>
+</a>
+
+@if (service is null)
+{
+    <div class="alert alert-primary text-white">
+        Loading...
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title">افزودن سرویس</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-block">
+                        <EditForm Model="service" OnValidSubmit="SubmitAsync">
+                            <DataAnnotationsValidator />
+                            <div class="input-group">
+                                <label class="form-label">عنوان سرویس</label>
+                                <InputText class="form-control border-primary" @bind-Value="service.Name" />
+                            </div>
+                            <div class="input-group">
+                                <label class="form-label">توضیحات سرویس</label>
+                                <InputTextArea class="form-control border-primary" cols="12" rows="12" @bind-Value="service.Description"></InputTextArea>
+                            </div>
+                            <div class="input-group">
+                                <label class="form-label">آیکون</label>
+                                <InputText class="form-control border-primary" @bind-Value="@service.Icon" />
+                            </div>
+                            <div class="input-group">
+                                <label class="form-label">تصویر سرویس</label>
+                                @if (!string.IsNullOrEmpty(browserFile?.Name))
+                                {
+                                    <p>@browserFile.Name</p>
+                                }
+                                <div class="custom-file">
+                                    <InputFile OnChange="@(e => browserFile = e.File)" type="file" accept=".jpg,.jpeg,.png" class="custom-file-input" id="inputGroupFile01" />
+                                    <label class="custom-file-label">انتخاب فایل</label>
+                                </div>
+                            </div>
+                            <ValidationMessage For="@(() => service.Name)" />
+                            <ValidationMessage For="@(() => service.Description)" />
+                            <ValidationMessage For="@(() => service.Icon)" />
+
+                            @if (hasError)
+                            {
+                                <div class="alert alert-danger text-white">
+                                    مشگلی پیش آمده. لطفا فایل log را برسی کنید
+                                </div>
+                            }
+                            <div class="input-group">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="icon-plus"></i> ویرایش سرویس
+                                </button>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [Inject]
+    private NavigationManager? navigationManager { get; set; }
+
+    [Inject]
+    private IServiceRepository? serviceRepository { get; set; }
+
+    private Service service { get; set; } = null!;
+    private IBrowserFile? browserFile { get; set; }
+    private bool hasError { get; set; } = false;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        service = await serviceRepository?.FindAsync(Id)!;
+    }
+
+    private async Task SubmitAsync()
+    {
+
+        if (browserFile is not null)
+        {
+            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", "ServiceImage", service.ImagePath);
+            File.Delete(imagePath);
+            service.ImagePath = await SaveChangedImage();
+        }
+        hasError = !await serviceRepository?.UpdateAsync(service)!;
+        if (!hasError)
+        {
+            navigationManager?.NavigateTo("/Admin/Services");
+        }
+
+    }
+
+    private async Task<string> SaveChangedImage()
+    {
+        string imageName = $"{Guid.NewGuid()}{Path.GetExtension(browserFile?.Name)}";
+        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", "ServiceImage", imageName);
+        await FileSaver.SaveFileAsync(browserFile!, imagePath);
+        return imageName;
+    }
+}

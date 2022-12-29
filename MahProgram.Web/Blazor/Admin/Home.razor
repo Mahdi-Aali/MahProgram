@@ -1,0 +1,74 @@
+﻿@page "/Admin"
+@page "/Admin/Home"
+
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="media align-items-stretch">
+                    <div class="p-2 text-center bg-success rounded-right pt-3">
+                        <i class="icon-call-in font-large-2 text-white"></i>
+                    </div>
+                    <div class="p-2 media-body">
+                        <a @onclick="@(() => navigationManager?.NavigateTo("/Admin/ContactUs"))">تماس با ما</a>
+                        <h5 class="text-bold-400 mb-0">1,022</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="media align-items-stretch">
+                    <div class="p-2 text-center bg-primary rounded-right pt-3">
+                        <i class="icon-layers font-large-2 text-white"></i>
+                    </div>
+                    <div class="p-2 media-body">
+                        <a @onclick="@(() => navigationManager?.NavigateTo("/Admin/Services"))">خدمات</a>
+                        <h5 class="text-bold-400 mb-0">7</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="media align-items-stretch">
+                    <div class="p-2 text-center bg-info rounded-right pt-3">
+                        <i class="icon-user font-large-2 text-white"></i>
+                    </div>
+                    <div class="p-2 media-body">
+                        <a @onclick="@(() => navigationManager?.NavigateTo("/Admin/Team"))">تیم ما</a>
+                        <h5 class="text-bold-400 mb-0">7</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="media align-items-stretch">
+                    <div class="p-2 text-center bg-secondary rounded-right pt-3">
+                        <i class="icon-screen-desktop font-large-2 text-white"></i>
+                    </div>
+                    <div class="p-2 media-body">
+                        <a @onclick="@(() => navigationManager?.NavigateTo("/Admin/Projects"))">پروژه های ما</a>
+                        <h5 class="text-bold-400 mb-0">7</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject]
+    public NavigationManager? navigationManager { get; set; }
+}

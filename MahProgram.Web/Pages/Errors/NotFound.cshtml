@@ -1,0 +1,33 @@
+﻿@page
+@model MahProgram.Web.Pages.Errors.NotFoundModel
+@{
+    ViewBag.Title = "404 - صفحه مورد نظر پیدا نشد";
+}
+
+
+
+@section PageTop
+    {
+    <div class="cover" data-image="/assets/images/photos/parallax.jpg">
+        <div class="page-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 rtl-text">
+                        <h1>404</h1>
+                    </div>
+                    <div class="col-lg-12">
+                        <ol class="breadcrumb rtl-text">
+                            <li><a asp-controller="Home" asp-action="Index">صفحه اصلی</a></li>
+                            <li class="active">خطای 404</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<h1 class="bg-info text-white text-center p-4">
+    404 - صفحه مورد نظر پیدا نشد
+</h1>

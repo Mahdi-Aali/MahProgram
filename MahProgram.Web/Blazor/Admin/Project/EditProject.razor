@@ -1,0 +1,187 @@
+﻿@using MahProgram.DataAccess.Repositories.ProjectRepository;
+@using MahProgram.DataAccess.Models.ProjectModel;
+@using MahProgram.Utilities.FileManagment;
+@page "/Admin/Projects/EditProject/{Id:int}"
+@inherits OwningComponentBase<IProjectRepository>
+
+<a class="btn btn-primary" @onclick="@(() => navigationManager?.NavigateTo("/Admin"))">
+    <i class="icon-arrow-left"></i>
+</a>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-wrap bar-success">
+                    <h4 class="card-title">افزودن عضو</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card-block">
+                    <EditForm Model="project" OnValidSubmit="SubmitAsync">
+                        <DataAnnotationsValidator />
+                        <div class="input-group">
+                            <label class="form-label">نام</label>
+                            <InputText class="form-control border-primary" @bind-Value="project.Name" />
+                        </div>
+                        <div class="input-group">
+                            <label class="form-label">توضیحات @project.Description.Length</label>
+                            <InputTextArea class="form-control border-primary" cols="12" rows="12" @bind-Value="project.Description"></InputTextArea>
+                        </div>
+                        <div class="input-group">
+                            <label class="form-label">آیکن پروژه</label>
+                            @if (!string.IsNullOrEmpty(Icon?.Name))
+                            {
+                                <p>@Icon.Name</p>
+                            }
+                            <div class="custom-file">
+                                <InputFile OnChange="@(e => Icon = e.File)" type="file" accept=".jpg,.jpeg,.png" class="custom-file-input" id="inputGroupFile01" />
+                                <label class="custom-file-label">انتخاب فایل</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="form-label">تصویر اول پروژه</label>
+                            @if (!string.IsNullOrEmpty(MockUpImageOne?.Name))
+                            {
+                                <p>@MockUpImageOne.Name</p>
+                            }
+                            <div class="custom-file">
+                                <InputFile OnChange="@(e => MockUpImageOne = e.File)" type="file" accept=".jpg,.jpeg,.png" class="custom-file-input" id="inputGroupFile01" />
+                                <label class="custom-file-label">انتخاب فایل</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="form-label">تصویر دوم پروژه</label>
+                            @if (!string.IsNullOrEmpty(MockUpImageTwo?.Name))
+                            {
+                                <p>@MockUpImageTwo.Name</p>
+                            }
+                            <div class="custom-file">
+                                <InputFile OnChange="@(e => MockUpImageTwo = e.File)" type="file" accept=".jpg,.jpeg,.png" class="custom-file-input" id="inputGroupFile01" />
+                                <label class="custom-file-label">انتخاب فایل</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="form-label">تصویر سوم پروژه</label>
+                            @if (!string.IsNullOrEmpty(MockUpImageThree?.Name))
+                            {
+                                <p>@MockUpImageThree.Name</p>
+                            }
+                            <div class="custom-file">
+                                <InputFile OnChange="@(e => MockUpImageThree = e.File)" type="file" accept=".jpg,.jpeg,.png" class="custom-file-input" id="inputGroupFile01" />
+                                <label class="custom-file-label">انتخاب فایل</label>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="form-label">تصویر چهارم پروژه</label>
+                            @if (!string.IsNullOrEmpty(MockUpImageFour?.Name))
+                            {
+                                <p>@MockUpImageFour.Name</p>
+                            }
+                            <div class="custom-file">
+                                <InputFile OnChange="@(e => MockUpImageFour = e.File)" type="file" accept=".jpg,.jpeg,.png" class="custom-file-input" id="inputGroupFile01" />
+                                <label class="custom-file-label">انتخاب فایل</label>
+                            </div>
+                        </div>
+
+                        <ValidationMessage For="@(() => project.Name)" />
+                        <ValidationMessage For="@(() => project.Description)" />
+
+
+                        @if (hasError)
+                        {
+                            <div class="alert alert-danger text-white">
+                                مشگلی پیش آمده. لطفا فایل log را برسی کنید
+                            </div>
+                        }
+                        <div class="input-group">
+                            <button type="submit" class="btn btn-success">
+                                <i class="icon-doc"></i> ویرایش عضو
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [Inject]
+    private NavigationManager? navigationManager { get; set; }
+
+    public Project project { get; set; } = new();
+
+    public IBrowserFile Icon { get; set; } = null!;
+    public IBrowserFile MockUpImageOne { get; set; } = null!;
+    public IBrowserFile MockUpImageTwo { get; set; } = null!;
+    public IBrowserFile MockUpImageThree { get; set; } = null!;
+    public IBrowserFile MockUpImageFour { get; set; } = null!;
+
+    private bool hasError = false;
+
+    private IProjectRepository repository => ScopedServices.CreateScope().ServiceProvider.GetRequiredService<IProjectRepository>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        project = await repository.FindAsync(Id);
+    }
+
+    private async Task SubmitAsync()
+    {
+
+        if (Icon is not null)
+        {
+            DeleteFile(project.Icon);
+            project.Icon = await SaveChangedImage(Icon);
+        }
+        if (MockUpImageOne is not null)
+        {
+            DeleteFile(project.MockUpImageOne);
+            project.MockUpImageOne = await SaveChangedImage(MockUpImageOne);
+        }
+        if (MockUpImageTwo is not null)
+        {
+            DeleteFile(project.MockUpImageTwo);
+            project.MockUpImageTwo = await SaveChangedImage(MockUpImageTwo);
+        }
+        if (MockUpImageThree is not null)
+        {
+            DeleteFile(project.MockUpImageThree);
+            project.MockUpImageThree = await SaveChangedImage(MockUpImageThree);
+        }
+        if (MockUpImageFour is not null)
+        {
+            DeleteFile(project.MockUpImageFour);
+            project.MockUpImageFour = await SaveChangedImage(MockUpImageFour);
+        }
+
+        hasError = !await repository.UpdateAsync(project);
+        if (!hasError)
+        {
+            navigationManager?.NavigateTo("/Admin/Projects");
+        }
+    }
+
+    private async Task<string> SaveChangedImage(IBrowserFile file)
+    {
+        string imageName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
+        await FileSaver.SaveFileAsync(file, Path.Combine(Directory.GetCurrentDirectory(), "Images", "ProjectImage", imageName));
+        return imageName;
+    }
+
+    private void DeleteFile(string fileName)
+    {
+        string basePath = Path.Combine(Directory.GetCurrentDirectory(), "Images", "ProjectImage");
+        File.Delete(Path.Combine(basePath, fileName));
+    }
+
+}
